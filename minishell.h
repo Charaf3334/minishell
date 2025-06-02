@@ -164,23 +164,6 @@ typedef struct s_vals
 	t_env				**my_env;
 }						t_vals;
 
-typedef struct s_exp
-{
-	int					count_d;
-	int					start;
-	char				*extracted;
-}						t_exp;
-
-typedef struct s_pls
-{
-	int					i;
-	int					count_d;
-	char				quote;
-	char				*joined;
-	int					in_d;
-	int					in_s;
-}						t_pls;
-
 typedef struct s_access
 {
 	int					flags;
