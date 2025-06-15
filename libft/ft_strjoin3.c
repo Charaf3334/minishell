@@ -6,7 +6,7 @@
 /*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:11:42 by zguellou          #+#    #+#             */
-/*   Updated: 2025/04/23 13:21:05 by ctoujana         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:40:39 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*ft_strjoin3(char *s1, char *s2, char *s3, t_free **free_nodes)
 	return (str);
 }
 
-char	*ft_strjoin3_normal(char *s1, char *s2, char *s3)
+char	*ft_strjoin3_normal(char *s1, char *s2, char *s3, t_free **free_nodes)
 {
 	size_t	s1_len;
 	size_t	s2_len;
@@ -53,6 +53,11 @@ char	*ft_strjoin3_normal(char *s1, char *s2, char *s3)
 	if (s1_len == 0 && s2_len == 0 && s3_len == 0)
 		return (NULL);
 	str = malloc(s1_len + s2_len + s3_len + 1);
+	if (!str)
+	{
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
+	}
 	ft_memcpy(str, s1, s1_len);
 	ft_memcpy(str + s1_len, s2, s2_len);
 	ft_memcpy(str + s1_len + s2_len, s3, s3_len);

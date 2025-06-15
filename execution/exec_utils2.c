@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:48:09 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:36 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:39:31 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,16 @@ void	print_error(char *str, int mode, t_free **free_nodes)
 	ft_putstr_fd(ft_strjoin(str, mess, free_nodes), 2, 0);
 }
 
-t_env_ll	*create_new_env(void)
+t_env_ll	*create_new_env(t_free **free_nodes)
 {
 	t_env_ll	*new_env;
 
 	new_env = malloc(sizeof(t_env_ll));
+	if (!new_env)
+	{
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
+	}
 	new_env->key = NULL;
 	new_env->value = NULL;
 	new_env->next = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_col.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:13:09 by ctoujana          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:04 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:42:56 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ void	*ft_malloc(size_t size, t_free **free_nodes)
 	node = malloc(sizeof(t_free));
 	if (!node)
 	{
-		perror("malloc");
-		cleanup_and_exit((*free_nodes)->my_env, free_nodes, 0);
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
 	}
 	node->adr = malloc(size);
 	if (!node->adr)
 	{
-		perror("malloc");
-		cleanup_and_exit((*free_nodes)->my_env, free_nodes, 0);
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
 	}
 	node->next = NULL;
 	ft_lstadd_front(free_nodes, node);
@@ -64,17 +64,18 @@ void	*ft_malloc2(size_t size, t_env **my_env, t_free **free_nodes)
 {
 	t_free	*node;
 
+	(void)my_env;
 	node = malloc(sizeof(t_free));
 	if (!node)
 	{
-		perror("malloc");
-		cleanup_and_exit(my_env, free_nodes, 0);
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
 	}
 	node->adr = malloc(size);
 	if (!node->adr)
 	{
-		perror("malloc");
-		cleanup_and_exit(my_env, free_nodes, 0);
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
 	}
 	node->next = NULL;
 	ft_lstadd_front(free_nodes, node);

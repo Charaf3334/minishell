@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_here_doc_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:58:35 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:56 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/14 13:22:05 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,15 @@ char	*here_doc_case(char *word, t_free **free_nodes)
 
 	len = ft_strlen(word);
 	out = ft_malloc(len + 1, free_nodes);
-	i = 0;
-	j = 0;
+	1 && (i = 0, j = 0);
 	while (i < len)
 	{
-		if (word[i] == '$' && (word[i + 1] == '"' || word[i + 1] == '\''))
+		if (word[i] == '$' && (word[i + 1] == '$'))
+		{
+			out[j++] = word[i++];
+			out[j++] = word[i++];
+		}
+		else if (word[i] == '$' && (word[i + 1] == '"' || word[i + 1] == '\''))
 			i = copy_quoted_segment(word, out, i, &j);
 		else if (word[i] == '"' || word[i] == '\'')
 			i = copy_quoted_segment(word, out, i, &j);

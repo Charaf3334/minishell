@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:29:20 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/30 15:25:23 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:45:52 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ int	check_dots_slash(const char *str, int mode)
 
 void	ft_dup2(int old_fd, int new_fd, t_env **my_env, t_free **free_nodes)
 {
+	(void)my_env;
 	if (dup2(old_fd, new_fd) == -1)
 	{
 		perror("dup2");
-		cleanup_and_exit(my_env, free_nodes, 1);
+		cleanup_and_exit(free_nodes, 1);
 	}
 	close(old_fd);
 }
@@ -86,14 +87,19 @@ int	open_outfile(t_exec *node, t_free **free_nodes)
 	return (0);
 }
 
-void	cleanup_and_exit(t_env **env, t_free **free_nodes, int status)
+void	cleanup_and_exit(t_free **free_nodes, int status)
 {
 	int	fd;
 
-	if (env)
-		free_env(env);
 	if (free_nodes)
-		ft_lstclear(free_nodes);
+	{
+		if (*free_nodes)
+		{
+			if ((*free_nodes)->my_env)
+				free_env((*free_nodes)->my_env);
+			ft_lstclear(free_nodes);
+		}
+	}
 	ft_exit_status(status, 1);
 	fd = 3;
 	while (fd < 1024)

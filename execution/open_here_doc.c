@@ -6,7 +6,7 @@
 /*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:01:23 by zguellou          #+#    #+#             */
-/*   Updated: 2025/06/01 17:02:48 by ctoujana         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:40:19 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	open_here_doc(t_exec *node, t_free **free_nodes)
 	head = node;
 	if (!head->here_doc || head->len_here_doc == 0)
 		return (0);
-	i = 0;
+	1 && (here_doc_limit(head, free_nodes), i = 0);
 	while (i < head->len_here_doc)
 	{
 		if (pipe(p_fd) == -1)
@@ -84,7 +84,7 @@ int	open_here_doc(t_exec *node, t_free **free_nodes)
 		}
 		pid = fork();
 		if (pid == -1)
-			(perror("fork"), cleanup_and_exit(node->my_env, free_nodes, 1));
+			(perror("fork"), cleanup_and_exit(free_nodes, 1));
 		if (open_here_doc_helper(here_docc_init(pid, i), head, p_fd,
 				free_nodes) == 5)
 			return (5);

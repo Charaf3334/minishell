@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/06/14 13:32:20 by ctoujana          #+#    #+#              #
+#    Updated: 2025/06/15 11:44:26 by ctoujana         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 SRCS = 	libft/ft_strlen.c libft/ft_memcpy.c libft/ft_strdup.c libft/ft_itoa.c libft/ft_split_normal.c libft/ft_split_not_normal.c \
@@ -17,7 +29,7 @@ SRCS = 	libft/ft_strlen.c libft/ft_memcpy.c libft/ft_strdup.c libft/ft_itoa.c li
 	execution/open_here_doc_utils.c execution/open_here_doc.c execution/extract_strs.c execution/export.c \
 	execution/export_utils1.c execution/export_utils2.c execution/cd_utils2.c execution/here_doc_utils.c \
 	execution/extract_ll.c execution/cd.c execution/cd_utils.c execution/execute.c \
-	parsing/expand.c parsing/expand_in_out.c
+	parsing/expand.c parsing/expand_in_out.c parsing/utils8.c
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
 
@@ -31,7 +43,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean: 
-	rm -f $(OBJS) $(B_OBJS)
+	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 14:19:38 by ctoujana          #+#    #+#             */
-/*   Updated: 2025/05/25 15:06:34 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:38:29 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,13 @@ t_env	*env_generator(char **env, t_free **free_nodes)
 	t_env	*my_env;
 
 	my_env = malloc(sizeof(t_env));
+	if (!my_env)
+	{
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
+	}
 	my_env->env_strs = extract_strs_env(env, free_nodes);
-	my_env->env_ll = extract_ll_env(my_env->env_strs);
+	my_env->env_ll = extract_ll_env(my_env->env_strs, free_nodes);
 	my_env->default_path = ft_split_leaks(PATH_H, "");
 	return (my_env);
 }

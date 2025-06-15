@@ -3,45 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:40:55 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:47 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:39:49 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	**gen_strs_env(t_env_ll *env_ll)
+char	**gen_strs_env(t_env_ll *env_ll, t_free **f_nds)
 {
 	char		**strs;
 	t_env_ll	*head;
 	int			i;
 	int			len;
 
-	head = env_ll;
-	len = 0;
+	1 && (head = env_ll, len = 0);
 	while (head)
-	{
-		len++;
-		head = head->next;
-	}
+		1 && (len++, head = head->next);
 	strs = malloc((len + 1) * sizeof(char *));
-	i = 0;
-	head = env_ll;
+	if (!strs)
+	{
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(f_nds, 1);
+	}
+	1 && (i = 0, head = env_ll);
 	while (head)
 	{
 		if (head->value)
-			strs[i] = ft_strjoin3_normal(head->key, "=", head->value);
+			strs[i] = ft_strjoin3_normal(head->key, "=", head->value, f_nds);
 		else
-			strs[i] = ft_strdup_normal(head->key);
+			strs[i] = ft_strdup_normal(head->key, f_nds);
 		1 && (i++, head = head->next);
 	}
 	strs[len] = NULL;
 	return (strs);
 }
 
-void	refresh_env_strs(t_exec *head)
+void	refresh_env_strs(t_exec *head, t_free **free_nodes)
 {
 	char	**old;
 	int		j;
@@ -51,7 +51,8 @@ void	refresh_env_strs(t_exec *head)
 	while (old[j])
 		free(old[j++]);
 	free(old);
-	(*head->my_env)->env_strs = gen_strs_env((*head->my_env)->env_ll);
+	(*head->my_env)->env_strs = gen_strs_env((*head->my_env)->env_ll,
+			free_nodes);
 }
 
 void	print_export_env(char **env_quotes, int out_fd, t_free **free_nodes)
@@ -120,12 +121,13 @@ void	export_append_value(t_exec *head, t_free **free_nodes, char *cmd)
 		return ;
 	}
 	if (find_key(temp_key, (*head->my_env)->env_ll))
-		append_node(&((*head->my_env)->env_ll), temp_key, temp_value);
+		append_node(&((*head->my_env)->env_ll), temp_key, temp_value,
+			free_nodes);
 	else
 	{
-		new_ll = ft_new_env_ll_2(temp_key, temp_value, head);
+		new_ll = ft_new_env_ll_2(temp_key, temp_value, head, free_nodes);
 		ft_lstadd_back(head->my_env, new_ll);
 	}
-	refresh_env_strs(head);
+	refresh_env_strs(head, free_nodes);
 	ft_exit_status(0, 1);
 }

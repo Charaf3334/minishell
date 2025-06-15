@@ -6,7 +6,7 @@
 /*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:42:33 by zguellou          #+#    #+#             */
-/*   Updated: 2025/06/01 17:50:01 by ctoujana         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:45:47 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char *cmd, int *exit)
 	if (mode == 2)
 		export_append_value(head, free_nodes, cmd);
 	else if (!ft_strchr(cmd, '='))
-		export_no_value(head, cmd);
+		export_no_value(head, cmd, free_nodes);
 	else
 		export_normal_assign(head, free_nodes, cmd);
 }
@@ -85,7 +85,7 @@ int	handle_export(t_exec *node, t_free **free_nodes, int *p_fd, int nodes_nums)
 	return (1);
 }
 
-int	handle_unset(t_exec *head)
+int	handle_unset(t_exec *head, t_free **free_nodes)
 {
 	int	i;
 
@@ -100,7 +100,7 @@ int	handle_unset(t_exec *head)
 	while (i < head->len_cmds)
 	{
 		free_and_delete_node(&((*head->my_env)->env_ll), head->cmd[i], head);
-		refresh_env_strs(head);
+		refresh_env_strs(head, free_nodes);
 		i++;
 	}
 	ft_exit_status(0, 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:53:27 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:55 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:40:05 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ static int	exit_standalone(t_exec *node, t_free **free_nodes)
 	arg = ft_strtrim(node->cmd[1], " \t\n\v\f\r", free_nodes);
 	ft_putstr_fd("exit\n", 1, 0);
 	if (node->len_cmds == 1)
-		cleanup_and_exit(node->my_env, free_nodes, ft_exit_status(0, 0));
+		cleanup_and_exit(free_nodes, ft_exit_status(0, 0));
 	if (exit_no_num(arg))
 	{
 		print_error(node->cmd[1], 5, free_nodes);
-		cleanup_and_exit(node->my_env, free_nodes, 2);
+		cleanup_and_exit(free_nodes, 2);
 	}
 	if (node->len_cmds > 2 && !is_num_long(arg))
 	{
@@ -93,9 +93,9 @@ static int	exit_standalone(t_exec *node, t_free **free_nodes)
 	if (is_num_long(arg))
 	{
 		print_error(node->cmd[1], 5, free_nodes);
-		cleanup_and_exit(node->my_env, free_nodes, 2);
+		cleanup_and_exit(free_nodes, 2);
 	}
-	cleanup_and_exit(node->my_env, free_nodes,
+	cleanup_and_exit(free_nodes,
 		(unsigned char)ft_atol(node->cmd[1]));
 	return (1);
 }

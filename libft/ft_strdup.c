@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 09:43:36 by zguellou          #+#    #+#             */
-/*   Updated: 2025/04/12 09:50:23 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:40:28 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_strdup(const char *s1, t_free **free_nodes)
 	return (str);
 }
 
-char	*ft_strdup_normal(const char *s1)
+char	*ft_strdup_normal(const char *s1, t_free **free_nodes)
 {
 	size_t	len;
 	char	*str;
@@ -42,6 +42,11 @@ char	*ft_strdup_normal(const char *s1)
 		return (NULL);
 	len = ft_strlen(s1);
 	str = malloc((len + 1));
+	if (!str)
+	{
+		ft_putstr_fd("malloc failed!\n", 2, 0);
+		cleanup_and_exit(free_nodes, 1);
+	}
 	i = 0;
 	while (i < len)
 	{

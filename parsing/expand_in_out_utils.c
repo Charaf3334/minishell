@@ -6,7 +6,7 @@
 /*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 14:19:38 by ctoujana          #+#    #+#             */
-/*   Updated: 2025/06/02 12:04:31 by ctoujana         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:19:36 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ void	ex_utils(t_exp_dollar_var *vars, char **result, t_quotes *context)
 		*result = ft_strjoin(*result, vars->status, context->free_nodes);
 	}
 	else if (!vars->var_name)
-		*result = ft_strjoin(*result, "$", context->free_nodes);
+	{
+		if (ft_strlen(vars->before_str) == 1)
+			*result = ft_strjoin(*result, "$", context->free_nodes);
+	}
 	else
 	{
 		set_ambiguous(context->node->files, vars->var_name);
@@ -50,6 +53,7 @@ void	expand_dollar_variable2(t_dollar_exp *dollar, char *before_str,
 	t_exp_dollar_var	vars;
 	char				**split;
 
+	vars.before_str = before_str;
 	init_exp(&vars, before_str, dollar, context);
 	if (vars.var_value)
 		split = ft_split_libft(vars.var_value, " \t\n\v\f\r");
@@ -66,6 +70,8 @@ void	expand_dollar_variable2(t_dollar_exp *dollar, char *before_str,
 	}
 	else if (vars.var_path)
 		*result = ft_strjoin(*result, vars.var_path, context->free_nodes);
+	else if (!vars.var_name)
+		expand_utils_15(dollar, result, context, &vars);
 	else
 		ex_utils(&vars, result, context);
 }

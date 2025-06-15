@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_nodes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:38:44 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/25 15:49:53 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:39:41 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	pre_execute_checks(t_exec *node, int nodes_nums, int p_fd[2],
 		return (-2);
 	if (handle_export(node, free_nodes, p_fd, nodes_nums))
 		return (-3);
-	if (handle_unset(node))
+	if (handle_unset(node, free_nodes))
 		return (-2);
 	return (0);
 }
@@ -49,7 +49,7 @@ static int	handle_child(t_exec *node, int nodes_nums, int p_fd[2],
 		ft_dup2(node->stdout_fd, STDOUT_FILENO, node->my_env, free_nodes);
 	close(p_fd[1]);
 	execute_cmd(node, free_nodes);
-	cleanup_and_exit(node->my_env, free_nodes, 0);
+	cleanup_and_exit(free_nodes, 0);
 	return (0);
 }
 

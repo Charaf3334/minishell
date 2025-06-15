@@ -6,7 +6,7 @@
 /*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:52:51 by ctoujana          #+#    #+#             */
-/*   Updated: 2025/06/02 12:04:41 by ctoujana         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:43:13 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,14 @@ int	has_only_spaces(char *str)
 	if (!str[i])
 		return (1);
 	return (0);
+}
+
+void	not_a_dir(char *cmd, t_exec *head, t_free **free_nodes)
+{
+	(void)head;
+	if (errno == 20)
+	{
+		print_error(cmd, 7, free_nodes);
+		cleanup_and_exit(free_nodes, 126);
+	}
 }

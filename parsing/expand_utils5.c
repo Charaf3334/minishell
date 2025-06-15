@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils5.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 14:19:38 by ctoujana          #+#    #+#             */
-/*   Updated: 2025/05/25 15:05:50 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:29:11 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	expand_dollar_variable(t_dollar_exp *dollar, char *before_str,
 {
 	t_exp_dollar_var	vars;
 
+	vars.before_str = before_str;
 	vars.var_name = ft_substr(before_str, dollar->start + 1, dollar->end
 			- dollar->start, context->free_nodes);
 	vars.var_value = my_getenv(context, vars.var_name);
@@ -33,8 +34,8 @@ void	expand_dollar_variable(t_dollar_exp *dollar, char *before_str,
 			vars.status = ft_itoa(vars.st, context->free_nodes);
 			*result = ft_strjoin(*result, vars.status, context->free_nodes);
 		}
-		else if (!vars.var_name && !(before_str + dollar->start + 1)[0])
-			*result = ft_strjoin(*result, "$", context->free_nodes);
+		else if (!vars.var_name)
+			expand_utils_16(dollar, result, context, &vars);
 		else
 			*result = ft_strjoin(*result, vars.var_value, context->free_nodes);
 	}

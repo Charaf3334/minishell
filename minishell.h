@@ -6,7 +6,7 @@
 /*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 13:23:12 by zguellou          #+#    #+#             */
-/*   Updated: 2025/06/02 12:04:55 by ctoujana         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:43:56 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
 
 typedef struct s_quote_exp
 {
@@ -198,6 +199,7 @@ typedef struct s_exp_dollar_var
 	char				*var_path;
 	int					st;
 	char				*status;
+	char				*before_str;
 }						t_exp_dollar_var;
 
 typedef struct s_join_strs
@@ -294,11 +296,13 @@ int						get_word_len2(char *str, char *c, int *j);
 char					*ft_itoa(int n, t_free **free_nodes);
 void					ft_lstadd_back(t_env **my_env, t_env_ll *new);
 long					ft_atol(char *str);
-char					*ft_strdup_normal(const char *s1);
-char					*ft_strjoin3_normal(char *s1, char *s2, char *s3);
+char					*ft_strdup_normal(const char *s1, t_free **free_nodes);
+char					*ft_strjoin3_normal(char *s1, char *s2, char *s3,
+							t_free **free_nodes);
 char					*ft_substr_normal(char *s, unsigned int start,
-							size_t len);
-char					*ft_strjoin_normal(char *s1, char *s2);
+							size_t len, t_free **free_nodes);
+char					*ft_strjoin_normal(char *s1, char *s2,
+							t_free **free_nodes);
 size_t					ft_doublen(char **str);
 int						count_words(char *str, char *c);
 int						get_word_len(char *str, char *c, int *j);
@@ -381,22 +385,22 @@ int						index_last_quotes(int index, t_quote_exp *quote_node,
 							char *type);
 int						is_in_quotes(int index, t_quote_exp *quote_node,
 							char *type);
+int						is_in_quotes2(int index, t_quote_exp *quote_node);
 int						check_exp(char **str, int len);
 void					handle_regular_chars(char *before_str, int *i,
 							char **result, t_quotes *context);
 void					execution(t_exec *head, int nodes_num,
 							t_free **free_nodes);
 char					**extract_strs_env(char **env, t_free **free_nodes);
-t_env_ll				*extract_ll_env(char **env_strs);
-char					**gen_strs_env(t_env_ll *env_ll);
+t_env_ll				*extract_ll_env(char **env_strs, t_free **free_nodes);
+char					**gen_strs_env(t_env_ll *env_ll, t_free **free_nodes);
 int						find_key(char *key, t_env_ll *env_ll);
-void					append_node(t_env_ll **env_ll, char *key, char *value);
-t_env_ll				*ft_new_env_ll_2(char *key, char *value, t_exec *head);
-t_env_ll				*ft_new_env_ll(char *str, t_exec *node);
+void					append_node(t_env_ll **env_ll, char *key, char *value,
+							t_free **free_nodes);
 void					free_and_delete_node(t_env_ll **env_ll, char *key,
 							t_exec *head);
 int						check_valid_identifier(char *ident);
-t_env_ll				*create_new_env(void);
+t_env_ll				*create_new_env(t_free **free_nodes);
 int						check_access(t_exec *node, t_free **free_nodes);
 void					open_infile(t_exec *node, t_free **free_nodes);
 int						open_here_doc(t_exec *node, t_free **free_nodes);
@@ -406,10 +410,11 @@ void					ft_dup2(int old_fd, int new_fd, t_env **my_env,
 char					*check_valid_path(char **paths, char **args,
 							t_free **free_nodes);
 char					*extract_path(char **env);
-t_env_ll				*create_new_env(void);
 void					print_error(char *str, int mode, t_free **free_nodes);
-t_env_ll				*ft_new_env_ll_2(char *key, char *value, t_exec *head);
-t_env_ll				*ft_new_env_ll(char *str, t_exec *node);
+t_env_ll				*ft_new_env_ll_2(char *key, char *value, t_exec *head,
+							t_free **free_nodes);
+t_env_ll				*ft_new_env_ll(char *str, t_exec *node,
+							t_free **free_nodes);
 char					**format_env_vars(char **env, t_free **free_nodes);
 int						check_access(t_exec *node, t_free **free_nodes);
 void					sig_heredoc(int signo);
@@ -428,20 +433,19 @@ int						wait_for_childs(int *quit_printed, t_exec *head);
 void					execute_nodes_helper(int p_fd[], int nodes_nums,
 							t_exec *node, t_free **free_nodes);
 int						handle_exit(t_exec *node, t_free **free_nodes);
-void					cleanup_and_exit(t_env **env, t_free **free_nodes,
+void					cleanup_and_exit(t_free **free_nodes,
 							int status);
-int						handle_export_unset(t_exec *node, t_free **free_nodes,
-							int *p_fd, int nodes_nums);
 int						handle_export(t_exec *node, t_free **free_nodes,
 							int *p_fd, int nodes_nums);
-void					refresh_env_strs(t_exec *head);
+void					refresh_env_strs(t_exec *head, t_free **free_nodes);
 void					print_export_env(char **env_quotes, int out_fd,
 							t_free **free_nodes);
 void					handle_export_no_args(t_exec *head, t_free **free_nodes,
 							int *p_fd, int nodes_nums);
 void					export_append_value(t_exec *head, t_free **free_nodes,
 							char *cmd);
-void					export_no_value(t_exec *head, char *cmd);
+void					export_no_value(t_exec *head, char *cmd,
+							t_free **free_nodes);
 void					export_normal_assign(t_exec *head, t_free **free_nodes,
 							char *cmd);
 t_list					*ft_lstlast_exp(t_list *lst);
@@ -450,7 +454,6 @@ int						ft_lstsize_exp(t_list *my_lst);
 t_list					*ft_lstnew_exp(char *content, t_free **free_nodes);
 int						is_quoted(char *str);
 int						has_quote(char *str);
-t_env_ll				*extract_ll_env(char **env_strs);
 int						execute_nodes(t_exec *node, int nodes_nums,
 							t_free **free_nodes);
 int						cd_print_home_error(char *pwd, int flag,
@@ -521,7 +524,13 @@ int						count_infiles(char *before_str_joined);
 int						count_outfiles(char *before_str_joined);
 void					outfile_utils(char *line, int *i, int *count);
 int						fd_return(t_files *files);
-int						handle_unset(t_exec *head);
+int						handle_unset(t_exec *head, t_free **free_nodes);
 int						has_only_spaces(char *str);
+void					not_a_dir(char *cmd, t_exec *head, t_free **free_nodes);
+void					here_doc_limit(t_exec *head, t_free **free_nodes);
+void					expand_utils_15(t_dollar_exp *dollar, char **result,
+							t_quotes *context, t_exp_dollar_var *vars);
+void					expand_utils_16(t_dollar_exp *dollar, char **result,
+							t_quotes *context, t_exp_dollar_var *vars);
 
 #endif

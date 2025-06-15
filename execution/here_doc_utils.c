@@ -6,7 +6,7 @@
 /*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 15:09:10 by zguellou          #+#    #+#             */
-/*   Updated: 2025/06/01 16:50:35 by ctoujana         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:43:35 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 void	exit_from_here_doc(char *line, int *p_fd, t_exec *head,
 	t_free **free_nodes)
 {
+	(void)head;
 	if (line)
 		free(line);
 	close(p_fd[1]);
-	cleanup_and_exit(head->my_env, free_nodes, 0);
+	cleanup_and_exit(free_nodes, 0);
 }
 
 void	handle_fallback(t_exp_here *v, char **new, int *i, t_quotes ctx)

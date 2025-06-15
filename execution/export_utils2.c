@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:49:59 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:49 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:47:11 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	export_no_value(t_exec *head, char *cmd)
+void	export_no_value(t_exec *head, char *cmd, t_free **free_nodes)
 {
 	t_env_ll	*new_ll;
 
 	if (find_key(cmd, (*head->my_env)->env_ll))
 		return ;
-	new_ll = ft_new_env_ll(cmd, head);
+	new_ll = ft_new_env_ll(cmd, head, free_nodes);
 	ft_lstadd_back(head->my_env, new_ll);
-	refresh_env_strs(head);
+	refresh_env_strs(head, free_nodes);
 	ft_exit_status(0, 1);
 }
 
@@ -39,8 +39,8 @@ void	export_normal_assign(t_exec *head, t_free **free_nodes, char *cmd)
 	}
 	if (find_key(temp_key, (*head->my_env)->env_ll))
 		free_and_delete_node(&((*head->my_env)->env_ll), temp_key, head);
-	new_ll = ft_new_env_ll(cmd, head);
+	new_ll = ft_new_env_ll(cmd, head, free_nodes);
 	ft_lstadd_back(head->my_env, new_ll);
-	refresh_env_strs(head);
+	refresh_env_strs(head, free_nodes);
 	ft_exit_status(0, 1);
 }

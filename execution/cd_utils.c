@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 10:39:44 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:26 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:56:17 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,15 @@ void	cd_helper(t_exec *head, char *oldpwd_value, char *pwd,
 		if (!ft_strcmp(ll->key, "OLDPWD"))
 		{
 			free(ll->value);
-			ll->value = ft_strdup_normal(oldpwd_value);
+			ll->value = ft_strdup_normal(oldpwd_value, free_nodes);
 		}
 		ll = ll->next;
 	}
 	free_and_delete_node(&(*head->my_env)->env_ll, "PWD", head);
-	new_ll = ft_new_env_ll(ft_strjoin("PWD=", pwd, free_nodes), head);
+	new_ll = ft_new_env_ll(ft_strjoin("PWD=", pwd, free_nodes), head,
+			free_nodes);
 	ft_lstadd_back(head->my_env, new_ll);
-	refresh_env_strs(head);
+	refresh_env_strs(head, free_nodes);
 }
 
 int	cd_print_home_error(char *pwd, int flag, t_free **free_nodes)

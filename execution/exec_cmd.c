@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zguellou <zguellou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctoujana <ctoujana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 10:43:44 by zguellou          #+#    #+#             */
-/*   Updated: 2025/05/10 17:19:32 by zguellou         ###   ########.fr       */
+/*   Updated: 2025/06/15 11:41:37 by ctoujana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,22 @@ static void	get_command_helper(char *cmd, t_exec *head, t_free **free_nodes)
 		if (S_ISDIR(st.st_mode))
 		{
 			print_error(cmd, 4, free_nodes);
-			cleanup_and_exit(head->my_env, free_nodes, 126);
+			cleanup_and_exit(free_nodes, 126);
 		}
 		else if (S_ISREG(st.st_mode))
 		{
 			if (access(cmd, X_OK) != 0)
 			{
 				print_error(cmd, 3, free_nodes);
-				cleanup_and_exit(head->my_env, free_nodes, 126);
+				cleanup_and_exit(free_nodes, 126);
 			}
 		}
 	}
 	else
 	{
+		not_a_dir(cmd, head, free_nodes);
 		print_error(cmd, 2, free_nodes);
-		cleanup_and_exit(head->my_env, free_nodes, 127);
+		cleanup_and_exit(free_nodes, 127);
 	}
 }
 
@@ -79,7 +80,7 @@ static char	*get_command_path(t_exec *head, char **paths, int flag,
 			else
 			{
 				print_error(args[0], 1, free_nodes);
-				cleanup_and_exit(head->my_env, free_nodes, 127);
+				cleanup_and_exit(free_nodes, 127);
 			}
 			return (NULL);
 		}
@@ -97,22 +98,22 @@ static void	exec_command(char *path, char **args, t_exec *head,
 		if (stat(path, &st) == 0)
 		{
 			if (S_ISREG(st.st_mode) && access(args[0], F_OK | X_OK) == 0)
-				cleanup_and_exit(head->my_env, free_nodes, 0);
+				cleanup_and_exit(free_nodes, 0);
 			if (S_ISREG(st.st_mode))
 			{
 				print_error(args[0], 3, free_nodes);
-				cleanup_and_exit(head->my_env, free_nodes, 126);
+				cleanup_and_exit(free_nodes, 126);
 			}
 			else
 			{
 				print_error(args[0], 4, free_nodes);
-				cleanup_and_exit(head->my_env, free_nodes, 126);
+				cleanup_and_exit(free_nodes, 126);
 			}
 		}
 		else
 		{
 			print_error(args[0], 1, free_nodes);
-			cleanup_and_exit(head->my_env, free_nodes, 127);
+			cleanup_and_exit(free_nodes, 127);
 		}
 	}
 }
@@ -134,7 +135,7 @@ void	execute_cmd(t_exec *node, t_free **free_nodes)
 	if (check_dots_slash(args[0], 1) || !args[0][0])
 	{
 		print_error(args[0], 1, free_nodes);
-		cleanup_and_exit(node->my_env, free_nodes, 127);
+		cleanup_and_exit(free_nodes, 127);
 	}
 	paths = prepare_paths(head, free_nodes, &flag);
 	valid_path = get_command_path(head, paths, flag, free_nodes);
