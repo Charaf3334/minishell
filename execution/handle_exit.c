@@ -15,11 +15,17 @@
 static int	is_num_long(char *str)
 {
 	long	val;
+	int		j;
 
 	val = ft_atol(str);
-	if (val == LONG_MAX && ft_strcmp(str, "9223372036854775807") != 0)
+	j = 0;
+	if (str[j] && str[j] == '+')
+		j++;
+	while (str[j] && str[j] == '0')
+		j++;
+	if (val == LONG_MAX && ft_strcmp(&str[j], "9223372036854775807") != 0)
 		return (1);
-	if (val == LONG_MIN && ft_strcmp(str, "-9223372036854775808") != 0)
+	if (val == LONG_MIN && ft_strcmp(&str[j], "-9223372036854775808") != 0)
 		return (1);
 	return (0);
 }
