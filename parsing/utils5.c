@@ -19,8 +19,13 @@ t_env	*env_generator(char **env, t_free **free_nodes)
 	my_env = malloc(sizeof(t_env));
 	if (!my_env)
 	{
-		ft_putstr_fd("malloc failed!\n", 2, 0);
-		cleanup_and_exit(free_nodes, 1);
+		if ((*free_nodes))
+			cleanup_and_exit(free_nodes, 1);
+		else
+		{
+			ft_putstr_fd("malloc failed!\n", 2, 0);
+			exit(1);
+		}
 	}
 	my_env->env_strs = extract_strs_env(env, free_nodes);
 	my_env->env_ll = extract_ll_env(my_env->env_strs, free_nodes);
